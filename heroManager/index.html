@@ -195,10 +195,23 @@
   <script src="./lib/js/jquery-1.12.4.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="../../template-web.js"></script>
-  <script id="herolistTyp" type="text/html">
-    <!-- 模板引擎 -->
+  <script src="../template-web.js"></script>
+  <script id="typetmp" type="text/html">
+      <!-- 模板引擎 -->
     {{each data v}}
+  <tr>
+    <td><img src="{{v.icon}}" alt=""></td>
+    <td>{{v.name}}</td>
+    <td>{{v.skill}}</td>
+    <td>
+      <button onclick="location.href='./edit.html'" class="btn btn-primary">编辑</button>
+      <button onclick="alert('你真狠')" class="btn btn-danger" data-id="{{v.id}}">删除</button>
+    </td>
+  </tr>
+  {{/each}}
+
+  <!-- 模板引擎 -->
+  <!-- {{each data v}}
   <tr>
     <td><img src="{{v.icon}}" alt=""></td>
     <td>{{v.name}}</td>
@@ -208,61 +221,91 @@
       <button " data-id=" {{v.id}}" class="btn btn-danger btn-delete">删除</button>
     </td>
   </tr>
-  {{/each}}
+  {{/each}} -->
   </script>
 
   <script>
     //入口函数
     $(function () {
-      // 封装获取英雄函数
-      function getData() {
-        // 获取所有英雄
-        $.ajax({
-          type: 'get',
-          url: 'http://localhost:4399/hero/all',
-          success: function (backData) {
-            // console.log(backData);
-            if (backData.code == 200) {
-              // 将模板引擎渲染到页面上
-              let res = template('herolistTyp', backData);
-              $('tbody').html(res);
-            }
+      $.ajax({
+        type: 'get',
+        url: 'http://localhost:4399/hero/all',
+        success: function (backdata) {
+          // console.log(backdata);
+          if (backdata.code == 200) {
+            let res = template('typetmp', backdata);
+            $('tbody').html(res);
           }
-        })
-      }
-      getData();
-
-      $('tbody').on('click', '.btn-delete', function () {
-        // 保存当前点击的删除按钮
-        let that = $(this);
-        if (confirm('你确定要删除该英雄吗？')) {
-          let id = $(this).attr('data-id');
-          $.ajax({
-            type: 'get',
-            url: 'http://localhost:4399/hero/delete',
-            data: {
-              id: id
-            },
-            success: function (backData) {
-              // console.log(backData);
-              if (backData.code == 204) {
-                alert('删除成功');
-                // 第一种删除方式：整个页面刷新，用户体验差，不建议
-                // window.location.reload();
-
-                // 第二种刷新方式(建议):重新调用获取英雄函数
-                // getData();
-
-
-                //c.障眼法(就是把删除的这一行给移除) 
-                // 调用当前按钮的父亲tr,tr的父亲tbody删除方法删除该行
-                that.parent().parent().remove();
-              }
-
-            }
-          })
         }
       })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // 封装获取英雄函数
+      // function getData() {
+      //   // 获取所有英雄
+      //   $.ajax({
+      //     type: 'get',
+      //     url: 'http://localhost:4399/hero/all',
+      //     success: function (backData) {
+      //       // console.log(backData);
+      //       if (backData.code == 200) {
+      //         // 将模板引擎渲染到页面上
+      //         let res = template('herolistTyp', backData);
+      //         $('tbody').html(res);
+      //       }
+      //     }
+      //   })
+      // }
+      // getData();
+
+      // $('tbody').on('click', '.btn-delete', function () {
+      //   // 保存当前点击的删除按钮
+      //   let that = $(this);
+      //   if (confirm('你确定要删除该英雄吗？')) {
+      //     let id = $(this).attr('data-id');
+      //     $.ajax({
+      //       type: 'get',
+      //       url: 'http://localhost:4399/hero/delete',
+      //       data: {
+      //         id: id
+      //       },
+      //       success: function (backData) {
+      //         // console.log(backData);
+      //         if (backData.code == 204) {
+      //           alert('删除成功');
+      //           // 第一种删除方式：整个页面刷新，用户体验差，不建议
+      //           // window.location.reload();
+
+      //           // 第二种刷新方式(建议):重新调用获取英雄函数
+      //           // getData();
+
+
+      //           //c.障眼法(就是把删除的这一行给移除) 
+      //           // 调用当前按钮的父亲tr,tr的父亲tbody删除方法删除该行
+      //           that.parent().parent().remove();
+      //         }
+
+      //       }
+      //     })
+      //   }
+      // })
 
     });
   </script>
